@@ -1,3 +1,5 @@
+# Ubuntu install with encrypted ZFS /home and encrypted /boot and / LUKS
+
 Based on https://help.ubuntu.com/community/Full_Disk_Encryption_Howto_2019
 
 ## Usage
@@ -23,11 +25,7 @@ Based on https://help.ubuntu.com/community/Full_Disk_Encryption_Howto_2019
 13. Log back in as user
     - Your /home is now on a ZFS dataset
 
+## Misc
 
-Hibernate works!
-
-update-initramfs: Generating /boot/initrd.img-5.8.0-38-generic
-I: The initramfs will attempt to resume from /dev/dm-1
-I: (/dev/mapper/ubuntu--vg-swap_1)
-I: Set the RESUME variable to override this.
-
+- Tested on Ubuntu 20.10 and Kubuntu 20.10
+- Hibernate works just fine (technically, it does for me)
