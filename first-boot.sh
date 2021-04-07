@@ -35,7 +35,7 @@ zpool create -f \
     -o autotrim=on \
     -O encryption=aes-256-gcm \
     -O keylocation="file:///etc/zfs/zfskey_dpool_$(hostname)" \
-    -O keyformat=raw -O acltype=posixacl -O compression=lz4 \
+    -O keyformat=hex -O acltype=posixacl -O compression=lz4 \
     -O dnodesize=auto -O normalization=formD -O relatime=on \
     -O xattr=sa -O canmount=off -O mountpoint=/ dpool \
     -R /tmp/dpool /dev/disk/by-id/$(basename ${DISK_ID})-part6
