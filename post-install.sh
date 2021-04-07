@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -vx
+set -x
 
 . ./ubuntu-common.sh
 
