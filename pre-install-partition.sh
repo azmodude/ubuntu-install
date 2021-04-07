@@ -2,6 +2,8 @@
 
 . ./ubuntu-common.sh
 
+set -x
+
 sudo sgdisk --zap-all ${DEV}
 sudo sgdisk --new=1:0:+768M ${DEV}
 sudo sgdisk --new=2:0:+2M ${DEV}
