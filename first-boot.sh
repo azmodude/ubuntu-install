@@ -42,9 +42,10 @@ zpool create -f \
 zpool set cachefile=/etc/zfs/zpool.cache dpool
 
 # setup generic ZFS datasets and move old home over
-zfs create -p -o mountpoint=/home/azmo dpool/home/azmo
-chown -R azmo:azmo /tmp/dpool/home/azmo
-rsync -vau /home/azmo/ /tmp/dpool/home/azmo/
+zfs create -p -o mountpoint=/home/${USER} dpool/home/${USER}
+chown -R ${USER}:${USER} /tmp/dpool/home/${USER}
+# the slashes here DO matter
+rsync -vau /home/${USER}/ /tmp/dpool/home/${USER}/
 rm -rf /home
 zpool export dpool
 zpool import dpool
