@@ -20,7 +20,7 @@ done
 apt-get -y install zfsutils-linux
 
 # Create zfs key
-openssl rand -hex -out "/etc/zfs/zfskey_dpool_$(hostname)" 32
+openssl rand -hex -out "/etc/zfs/zfskey_dpool_$(hostname --fqdn)" 32
 chown root:root "/etc/zfs/zfskey_dpool_$(hostname --fqdn)" &&
     chmod 600 "/etc/zfs/zfskey_dpool_$(hostname --fqdn)"
 
@@ -34,8 +34,8 @@ zpool create -f \
     -o ashift=12 \
     -o autotrim=on \
     -O encryption=aes-256-gcm \
-    -O keylocation="file:///etc/zfs/zfskey_dpool_$(hostname)" \
-    -O keyformat=hex -O acltype=posixacl -O compression=lz4 \
+    -O keylocation="file:///etc/zfs/zfskey_dpool_$(hostname --fqdn)" \
+    -O keyformat=hex -O acltype=posixacl -O compression=zstd \
     -O dnodesize=auto -O normalization=formD -O relatime=on \
     -O xattr=sa -O canmount=off -O mountpoint=/ dpool \
     -R /tmp/dpool /dev/disk/by-id/$(basename ${DISK_ID})-part6
@@ -49,7 +49,7 @@ rsync -vau /home/${USER}/ /tmp/dpool/home/${USER}/
 rm -rf /home
 zpool export dpool
 zpool import dpool
-zfs load-key -L file:///etc/zfs/zfskey_dpool_$(hostname) dpool
+zfs load-key -L file:///etc/zfs/zfskey_dpool_$(hostname --fqdn) dpool
 zfs mount -a
 
 # Create and enable zfs-load-key.service
