@@ -37,3 +37,5 @@ Based on https://help.ubuntu.com/community/Full_Disk_Encryption_Howto_2019
 
 - Tested on Ubuntu 20.10 and Kubuntu 20.10
 - Hibernate works just fine (technically, it does for me)
+    - You might have to re-enable hibernation in KDE/GNOME as Ubuntu disables it 
+      globally
