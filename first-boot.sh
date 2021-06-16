@@ -53,6 +53,9 @@ zfs load-key -L file:///etc/zfs/zfskey_dpool_$(hostname --fqdn) dpool
 zfs mount -a
 
 # Create and enable zfs-load-key.service
-cp ./zfs-load-key@.service /etc/systemd/system
+cp ./zfs/zfs-load-key@.service /etc/systemd/system
+cp ./zfs/zfs-scrub@.service /etc/systemd/system
+cp ./zfs/zfs-scrub@.timer /etc/systemd/system
+
 systemctl daemon-reload
-systemctl enable zfs-load-key@dpool.service
+systemctl enable zfs-load-key@dpool.service zfs-scrub@dpool.timer
