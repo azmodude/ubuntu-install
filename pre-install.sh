@@ -2,7 +2,7 @@
 
 . ./ubuntu-common.sh
 
-set -x
+set -Eeuxo pipefail
 
 echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksFormat --type=luks1 ${DEVP}1
 echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksFormat --type=luks2 ${DEVP}5

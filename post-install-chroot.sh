@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -vx
+set -Eeuxo pipefail
+
 sudo mount -a
 
 sudo apt-get install -y cryptsetup-initramfs

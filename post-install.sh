@@ -1,8 +1,8 @@
 #!/bin/bash
 
-set -x
-
 . ./ubuntu-common.sh
+
+set -Eeuxo pipefail
 
 sudo mount /dev/mapper/ubuntu--vg-root /target
 for n in proc sys dev etc/resolv.conf; do

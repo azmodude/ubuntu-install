@@ -2,7 +2,7 @@
 
 . ./ubuntu-common.sh
 
-set -x
+set -Eeuxo pipefail
 
 sudo sgdisk --zap-all ${DEV}
 sudo sgdisk --new=1:0:+768M ${DEV}

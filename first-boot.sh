@@ -1,6 +1,5 @@
 #!/bin/bash
-set -Eeuxo pipefail
-trap read DEBUG
+# trap read DEBUG
 
 if [ "$(id -u)" != 0 ]; then
     echo "Please execute with root rights."
@@ -8,6 +7,8 @@ if [ "$(id -u)" != 0 ]; then
 fi
 
 . ./ubuntu-common.sh
+
+set -Eeuxo pipefail
 
 DISK_ID=""
 for link in $(udevadm info --query=symlink --name=${DEV}); do
