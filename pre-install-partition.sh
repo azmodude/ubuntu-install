@@ -4,16 +4,26 @@
 
 set -Eeuxo pipefail
 
-sudo sgdisk --zap-all ${DEV}
-sudo sgdisk --new=1:0:+768M ${DEV}
-sudo sgdisk --new=2:0:+2M ${DEV}
-sudo sgdisk --new=3:0:+128M ${DEV}
-sudo sgdisk --new=5:0:+${LVM_SIZE} ${DEV}
-sudo sgdisk --new=6:0:0 ${DEV}
-sudo sgdisk --typecode=1:8301 --typecode=2:ef02 --typecode=3:ef00 --typecode=5:8301 --typecode=6:bf01 ${DEV}
-sudo sgdisk --change-name=1:boot --change-name=2:GRUB --change-name=3:EFI-SP --change-name=5:root --change-name=6:dpool ${DEV}
-sudo sgdisk --hybrid 1:2:3 ${DEV}
 
-sudo partprobe
+for partition in $(seq 1 5); do
+    sgdisk --delete="${partition}" "${DEV}" || true
+  done
+
+sudo sgdisk --new=1:0:+512M "${DEV}"
+sudo sgdisk --new=2:0:+2G "${DEV}"
+sudo sgdisk --new=3:0:+"${LVM_SIZE}" "${DEV}"
+
+# try to re-read partitions for good measure...
+partprobe "${INSTALL_DISK}"
+# ... still, give udev some time to create the new symlinks
+sleep 2
+
+# totally wipe old fs information
+for partition in $(seq 1 5); do
+  wipefs -af "${DEV}-part${partition}"
+done
+
+sudo sgdisk --typecode=1:ef00 --typecode=2:8301 --typecode=3:8301 "${DEV}"
+sudo sgdisk --change-name=1:EFI-SP --change-name=2:boot --change-name=3:root "${DEV}"
 
 echo "Rebooting is the safe option if partprobe complained."

@@ -17,6 +17,11 @@ done
 
 [[ -z ${DISK_ID} ]] && echo "Could not get /dev/disk/by-id for ${DEV}" && exit 99
 
+# TODO: Check if part 9 already exists!
+sudo sgdisk --new=9:0:0 "${DEV}"
+sudo sgdisk --typecode=9:bf01
+sudo sgdisk --change-name=9:dpool
+
 # Install ZFS
 apt-get -y install zfsutils-linux
 
@@ -39,7 +44,7 @@ zpool create -f \
     -O keyformat=hex -O acltype=posixacl -O compression=zstd \
     -O dnodesize=auto -O normalization=formD -O relatime=on \
     -O xattr=sa -O canmount=off -O mountpoint=/ dpool \
-    -R /tmp/dpool /dev/disk/by-id/$(basename ${DISK_ID})-part6
+    -R /tmp/dpool /dev/disk/by-id/"$(basename "${DISK_ID}")"-part9
 zpool set cachefile=/etc/zfs/zpool.cache dpool
 
 # setup generic ZFS datasets and move old home over
@@ -50,13 +55,11 @@ rsync -vau /home/${USER}/ /tmp/dpool/home/${USER}/
 rm -rf /home
 zpool export dpool
 zpool import dpool
-zfs load-key -L file:///etc/zfs/zfskey_dpool_$(hostname --fqdn) dpool
+zfs load-key -L file:///etc/zfs/zfskey_dpool_"$(hostname --fqdn)" dpool
 zfs mount -a
 
 # Create and enable zfs-load-key.service
 cp ./zfs/zfs-load-key@.service /etc/systemd/system
-cp ./zfs/zfs-scrub@.service /etc/systemd/system
-cp ./zfs/zfs-scrub@.timer /etc/systemd/system
 
 systemctl daemon-reload
 systemctl enable zfs-load-key@dpool.service zfs-scrub@dpool.timer
