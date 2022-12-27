@@ -4,7 +4,8 @@
 
 set -Eeuxo pipefail
 
-echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksFormat --type=luks2 "${INSTALL_DISK}-part2"
+# Ubuntu still cannot use LUKS2 for /boot
+echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksFormat --type=luks1 "${INSTALL_DISK}-part2"
 echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksFormat --type=luks2 "${INSTALL_DISK}-part3"
 
 echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksOpen "${INSTALL_DISK}-part2" "${DM}-part2_crypt"
