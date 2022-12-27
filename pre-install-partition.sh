@@ -4,7 +4,7 @@
 
 set -Eeuxo pipefail
 
-for partition in $(seq 1 5); do
+for partition in $(seq 1 3); do
     sudo sgdisk --delete="${partition}" "${DEV}" || true
 done
 
@@ -18,7 +18,7 @@ sudo partprobe "${DEV}"
 sleep 2
 
 # totally wipe old fs information
-for partition in $(seq 1 5); do
+for partition in $(seq 1 3); do
   sudo wipefs -af "${DEV}-part${partition}"
 done
 
