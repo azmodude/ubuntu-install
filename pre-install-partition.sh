@@ -13,7 +13,7 @@ sudo sgdisk --new=2:0:+2G "${DEV}"
 sudo sgdisk --new=3:0:+"${LVM_SIZE}" "${DEV}"
 
 # try to re-read partitions for good measure...
-sudo partprobe "${INSTALL_DISK}"
+sudo partprobe "${DEV}"
 # ... still, give udev some time to create the new symlinks
 sleep 2
 
