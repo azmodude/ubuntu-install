@@ -1,6 +1,7 @@
 #!/bin/bash
 
-export DEV=/dev/nvme0n1
+# Use a by-id link here
+export DEV=/dev/disk/by-id/...
 export DM="${DEV##*/}"
 DEVP="${DEV}$( if [[ "$DEV" =~ "nvme" ]]; then echo "p"; fi )"
 export DEVP
