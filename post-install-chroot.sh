@@ -9,7 +9,7 @@ sudo apt-get install -y cryptsetup-initramfs
 echo "KEYFILE_PATTERN=/etc/luks/*.keyfile" | sudo tee -a /etc/cryptsetup-initramfs/conf-hook
 echo "UMASK=0077" | sudo tee -a /etc/initramfs-tools/initramfs.conf
 
-sudo mkdir /etc/luks
+sudo mkdir -p /etc/luks
 sudo openssl rand -hex -out "/etc/luks/boot_os.keyfile" 32
 sudo chmod 700 /etc/luks
 sudo chmod 600 /etc/luks/boot_os.keyfile
