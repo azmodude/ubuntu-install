@@ -4,14 +4,14 @@
 
 set -Eeuxo pipefail
 
-echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksFormat --type=luks2 "${DEVP}1"
-echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksFormat --type=luks2 "${DEVP}3"
+echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksFormat --type=luks2 "${DEVP}-part2"
+echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksFormat --type=luks2 "${DEVP}-part3"
 
-echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksOpen "${DEVP}1" LUKS_BOOT
-echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksOpen "${DEVP}3" "${DM}3_crypt"
+echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksOpen "${DEVP}-part2" LUKS_BOOT
+echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksOpen "${DEVP}-part3" "${DM}3_crypt"
 
 sudo mkfs.ext4 -L boot /dev/mapper/LUKS_BOOT
-sudo mkfs.vfat -F 16 -n EFI-SP "${DEVP}2"
+sudo mkfs.vfat -F 16 -n EFI-SP "${DEVP}-part1"
 
 sudo pvcreate /dev/mapper/"${DM}3_crypt"
 sudo vgcreate ubuntu-vg /dev/mapper/"${DM}3_crypt"
