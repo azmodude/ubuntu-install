@@ -17,7 +17,7 @@ sudo chmod 600 /etc/luks/boot_os.keyfile
 echo -n "${LUKS_PASSWORD}" | sudo cryptsetup luksAddKey "${INSTALL_DISK}-part2" /etc/luks/boot_os.keyfile
 echo -n "${LUKS_PASSWORD}" | sudo cryptsetup luksAddKey "${INSTALL_DISK}-part3" /etc/luks/boot_os.keyfile
 
-echo "boot_crypt UUID=$(blkid -s UUID -o value "${INSTALL_DISK}-part2") /etc/luks/boot_os.keyfile luks,discard" | sudo tee -a /etc/crypttab
-echo "ubuntu--vg-root UUID=$(blkid -s UUID -o value "${INSTALL_DISK}-part3") /etc/luks/boot_os.keyfile luks,discard" | sudo tee -a /etc/crypttab
+echo "${DM}-part2_crypt UUID=$(blkid -s UUID -o value "${INSTALL_DISK}-part2") /etc/luks/boot_os.keyfile luks,discard" | sudo tee -a /etc/crypttab
+echo "${DM}-part3_crypt UUID=$(blkid -s UUID -o value "${INSTALL_DISK}-part3") /etc/luks/boot_os.keyfile luks,discard" | sudo tee -a /etc/crypttab
 
 sudo update-initramfs -u -k all
