@@ -1,12 +1,8 @@
 #!/bin/bash
 
 # Use a by-id link here
-export DEV=/dev/disk/by-id/...
-export DM="${DEV##*/}"
-DEVP="${DEV}$( if [[ "$DEV" =~ "nvme" ]]; then echo "p"; fi )"
-export DEVP
-DM="${DM}$( if [[ "$DM" =~ "nvme" ]]; then echo "p"; fi )"
-export DM
+export INSTALL_DISK=/dev/disk/by-id/...
+export DM="${INSTALL_DISK##*/}"
 
 export USER="azmo"
 export LVM_SIZE="100G"

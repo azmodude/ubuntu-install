@@ -4,17 +4,17 @@
 
 set -Eeuxo pipefail
 
-echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksFormat --type=luks2 "${DEVP}-part2"
-echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksFormat --type=luks2 "${DEVP}-part3"
+echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksFormat --type=luks2 "${INSTALL_DISK}-part2"
+echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksFormat --type=luks2 "${INSTALL_DISK}-part3"
 
-echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksOpen "${DEVP}-part2" LUKS_BOOT
-echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksOpen "${DEVP}-part3" "${DM}3_crypt"
+echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksOpen "${INSTALL_DISK}-part2" "${DM}-part2_crypt"
+echo -n ${LUKS_PASSWORD} | sudo cryptsetup luksOpen "${INSTALL_DISK}-part3" "${DM}-part3_crypt"
 
-sudo mkfs.ext4 -L boot /dev/mapper/LUKS_BOOT
-sudo mkfs.vfat -F 16 -n EFI-SP "${DEVP}-part1"
+sudo mkfs.vfat -F 32 -n EFI-SP "${INSTALL_DISK}-part1"
+sudo mkfs.ext4 -L boot /dev/mapper/"${DM}-part2_crypt"
 
-sudo pvcreate /dev/mapper/"${DM}3_crypt"
-sudo vgcreate ubuntu-vg /dev/mapper/"${DM}3_crypt"
+sudo pvcreate /dev/mapper/"${DM}-part3_crypt"
+sudo vgcreate ubuntu-vg /dev/mapper/"${DM}-part3_crypt"
 sudo lvcreate -L "${SWAP_SIZE}" -n swap_1 ubuntu-vg
 sudo lvcreate -l 100%FREE -n root ubuntu-vg
 

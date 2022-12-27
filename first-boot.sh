@@ -11,14 +11,14 @@ fi
 set -Eeuxo pipefail
 
 DISK_ID=""
-for link in $(udevadm info --query=symlink --name=${DEV}); do
+for link in $(udevadm info --query=symlink --name=${INSTALL_DISK}); do
     echo "${link}" | grep -q "by-id" && DISK_ID="$link"
 done
 
-[[ -z ${DISK_ID} ]] && echo "Could not get /dev/disk/by-id for ${DEV}" && exit 99
+[[ -z ${DISK_ID} ]] && echo "Could not get /dev/disk/by-id for ${INSTALL_DISK}" && exit 99
 
 # TODO: Check if part 9 already exists!
-sudo sgdisk --new=9:0:0 "${DEV}"
+sudo sgdisk --new=9:0:0 "${INSTALL_DISK}"
 sudo sgdisk --typecode=9:bf01
 sudo sgdisk --change-name=9:dpool
 

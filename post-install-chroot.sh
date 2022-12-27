@@ -14,10 +14,10 @@ sudo openssl rand -hex -out "/etc/luks/boot_os.keyfile" 32
 sudo chmod 700 /etc/luks
 sudo chmod 600 /etc/luks/boot_os.keyfile
 
-echo -n "${LUKS_PASSWORD}" | sudo cryptsetup luksAddKey "${DEVP}-part2" /etc/luks/boot_os.keyfile
-echo -n "${LUKS_PASSWORD}" | sudo cryptsetup luksAddKey "${DEVP}-part3" /etc/luks/boot_os.keyfile
+echo -n "${LUKS_PASSWORD}" | sudo cryptsetup luksAddKey "${INSTALL_DISK}-part2" /etc/luks/boot_os.keyfile
+echo -n "${LUKS_PASSWORD}" | sudo cryptsetup luksAddKey "${INSTALL_DISK}-part3" /etc/luks/boot_os.keyfile
 
-echo "LUKS_BOOT UUID=$(blkid -s UUID -o value "${DEVP}-part2") /etc/luks/boot_os.keyfile luks,discard" | sudo tee -a /etc/crypttab
-echo "${DM}3_crypt UUID=$(blkid -s UUID -o value "${DEVP}-part3") /etc/luks/boot_os.keyfile luks,discard" | sudo tee -a /etc/crypttab
+echo "boot_crypt UUID=$(blkid -s UUID -o value "${INSTALL_DISK}-part2") /etc/luks/boot_os.keyfile luks,discard" | sudo tee -a /etc/crypttab
+echo "ubuntu--vg-root UUID=$(blkid -s UUID -o value "${INSTALL_DISK}-part3") /etc/luks/boot_os.keyfile luks,discard" | sudo tee -a /etc/crypttab
 
 sudo update-initramfs -u -k all
